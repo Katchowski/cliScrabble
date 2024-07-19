@@ -102,7 +102,7 @@ public class board {
     public static void playletter(String str, int x, int y, Player player) {
         int points = 0;
 
-        board[x][y] = new Letter(str, x, y, player, points);
+        board[y][x] = new Letter(str, x, y, player, points);
     }
 
     public static void getBoard() {
@@ -151,5 +151,10 @@ public class board {
             y++;
         }
         System.out.println(lineSplit);
+    }
+
+    public static Letter[][] returnBoard () {
+
+        return board;
     }
 }

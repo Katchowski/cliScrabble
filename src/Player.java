@@ -5,7 +5,7 @@ public class Player {
 
     private String name;
     private ArrayList<String> hand = new ArrayList<String>();
-    private String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    private String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
     private double[] letterProbabilities = {.09, .02, .02, .04, .12, .02, .03, .02, .09, .01, .01, .04, .02, .06, .08, .02, .01, .06, .04, .02, .02, .01, .02, .01, .02, .01};
     private int[] points = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
 
@@ -21,9 +21,23 @@ public class Player {
             String letter = getLetter();
             if (letter != null) {
                 hand.add(letter);
+                int index = Arrays.binarySearch(letters, letter);
+                letterProbabilities[index] = letterProbabilities[index] - .01;
             }
         }
-        System.out.println(hand);
+    }
+
+    public void updatehand(int num) {
+        while (num > 0) {
+
+            String letter = getLetter();
+            if (letter != null) {
+                hand.add(letter);
+                int index = Arrays.binarySearch(letters, letter);
+                letterProbabilities[index] = letterProbabilities[index] - .01;
+            }
+            num--;
+        }
     }
 
     private String getLetter () {
@@ -51,35 +65,3 @@ public class Player {
         return this;
     }
 }
-
-
-/*
-
-A-9: 0-9
-B-2: 10-11
-C-2: 12-13
-D-4: 14-17
-E-12: 18-29
-F-2: 30-31
-G-3: 32-34
-H-2: 35-36
-I-9: 37-46
-J-1: 47
-K-1: 48
-L-4: 49-52
-M-2: 53-54
-N-6: 55-60
-O-8: 61-68
-P-2: 69-70
-Q-1: 71
-R-6: 72-77
-S-4: 78-81
-T-6: 82-87
-U-4: 88-91
-V-2: 92-93
-W-2: 94-95
-X-1: 96
-Y-2: 97-98
-Z-1: 99
-
- */
