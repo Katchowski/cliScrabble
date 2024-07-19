@@ -13,7 +13,7 @@ public class Scrabble {
     public static void addplayer(String name) {
         Player player = new Player(name);
         players.add(player);
-        System.out.println("Player" + name + "added with hand: " + player.getHand());
+        System.out.println("Player " + name + " added with hand: " + player.getHand());
     }
 
     public static void startgame() {
@@ -31,7 +31,7 @@ public class Scrabble {
     public static void turn(Player player) {
         board.getBoard();
         System.out.println("Player " + player.getName() + "'s turn");
-        System.out.println(player + "'s hand: " + player.getHand());
+        System.out.println(player.getName() + "'s hand: " + player.getHand());
 
         System.out.println("discard or playword?");
 
