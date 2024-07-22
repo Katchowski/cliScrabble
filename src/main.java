@@ -16,7 +16,7 @@ public class main {
 
 
 
-        words = getWords("C:\\Users\\katchowski\\IdeaProjects\\scrabble\\src\\words.txt");
+        words = getWords("src/words.txt");
         words.sort(String::compareToIgnoreCase);
 
         while (true) {

@@ -158,8 +158,11 @@ public class Scrabble {
             } else if (direction.equals("v")) {
                 if (checkIntersect(x, y + i)) {
                     if (board.returnBoard()[x][y + i].getLetterValue().equals(arr[i])) {
-                        System.out.println("Intersection found at " + x + i + ", " + y);
+                        System.out.println("Intersection found at " + x + ", " + y + i);
                         InvalidLetters.remove(arr[i]);
+                        ArrayList<String> uInputArr;
+                        uInputArr = (ArrayList<String>) Arrays.asList(uInput.split("(?!^)"));
+                        System.out.println(uInputArr);
                     } else {
                         System.out.println("Invalid placement 2");
                         validPlacement = false;
