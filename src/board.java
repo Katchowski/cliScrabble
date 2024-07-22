@@ -1,22 +1,20 @@
-import java.util.ArrayList;
 import java.util.StringJoiner;
 
 public class board {
 
 
-    static Letter[][] board = new Letter[15][15];
+    //static Letter[][] board = new Letter[15][15];
     static Space[][] spaces = new Space[15][15];
 
     public board() {
         System.out.println("Board created");
-        setup();
     }
 
     public void setup() {
-        for (int x = 0; x < board.length; x++) {
-            for (int y = 0; y < board[0].length; y++) {
-                board[x][y] = new Letter(" ", x, y, null, 0);
+        for (int x = 0; x < spaces.length; x++) {
+            for (int y = 0; y < spaces[0].length; y++) {
                 spaces[x][y] = new Space(x, y, false);
+                spaces[x][y].addLetter(null);
             }
         }
 
@@ -102,20 +100,21 @@ public class board {
     public static void playletter(String str, int x, int y, Player player) {
         int points = 0;
 
-        board[y][x] = new Letter(str, x, y, player, points);
+        spaces[y][x].playLetter(str, player, points);
+        spaces[y][x].hasLetter = true;
     }
 
     public static void getBoard() {
         int y = 1;
         String lineSplit = "";
         StringJoiner splitJoiner = new StringJoiner("+", "|", "|");
-        for (int index = 0; index < (board[0].length + 1); index++) {
+        for (int index = 0; index < (spaces[0].length + 1); index++) {
             splitJoiner.add(String.format("%5s", "").replace(" ", "-"));
         }
         lineSplit = splitJoiner.toString();
 
         StringJoiner strj = new StringJoiner(" | ", "| ", " |");
-        for (int i = 0; i < board.length + 1; i++) {
+        for (int i = 0; i < spaces.length + 1; i++) {
             if (i >= 10) {
                 strj.add(" " + i);
             } else {
@@ -125,7 +124,7 @@ public class board {
         System.out.println(lineSplit);
         System.out.println(strj.toString());
 
-        for (Letter[] row : board) {
+        for (Space[] row : spaces) {
             StringJoiner sj = new StringJoiner(" | ", "| ", " |");
 
             if (y >= 10) {
@@ -133,17 +132,17 @@ public class board {
             } else {
                 sj.add(" " + y + " ");
             }
-            for (Letter col : row) {
+            for (Space col : row) {
 
-                if (col.getLetter().equals("   ")) {
+                if (col.getLetterValue().equals(" null ")) {
 
-                    if (spaces[col.getX()][col.getY()].getMultiplier().contains("null")) {
+                    if (spaces[col.getLetterX()][col.getLetterY()].getMultiplier().contains("null")) {
                         sj.add("   ");
                     } else {
-                        sj.add(String.format(spaces[col.getX()][col.getY()].getMultiplier()));
+                        sj.add(String.format(spaces[col.getLetterX()][col.getLetterY()].getMultiplier()));
                     }
                 } else {
-                    sj.add(String.format(col.getLetter()));
+                    sj.add(String.format(col.getLetterValue()));
                 }
             }
             System.out.println(lineSplit);
@@ -153,8 +152,8 @@ public class board {
         System.out.println(lineSplit);
     }
 
-    public static Letter[][] returnBoard () {
+    public static Space[][] returnBoard () {
 
-        return board;
+        return spaces;
     }
 }

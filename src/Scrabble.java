@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -5,6 +6,7 @@ public class Scrabble {
 
     static ArrayList<Player> players = new ArrayList<Player>();
     static int currentPlayer = 0;
+    static String uInput;
 
     public Scrabble() {
 
@@ -70,24 +72,24 @@ public class Scrabble {
         System.out.println("Enter word direction (h or v): ");
         String direction = main.getin();
         System.out.println("Enter word to play: ");
-        String input = main.getin();
+        uInput = main.getin();
 
-        if (input.length() > 7) {
+        if (uInput.length() > 7) {
             System.out.println("Word too long");
             turn(player);
         }
 
-        if (checkWord(input, direction, x, y, player)) {
+        if (checkWord(uInput, direction, x, y, player)) {
             if (direction.equals("h")) {
-                for (int i = 0; i < input.length(); i++) {
-                    board.playletter(input.substring(i, i + 1), x + i, y, player);
+                for (int i = 0; i < uInput.length(); i++) {
+                    board.playletter(uInput.substring(i, i + 1), x + i, y, player);
                 }
-                updatehand(player, input);
+                updatehand(player, uInput);
             } else if (direction.equals("v")) {
-                for (int i = 0; i < input.length(); i++) {
-                    board.playletter(input.substring(i, i + 1), x, y + i, player);
+                for (int i = 0; i < uInput.length(); i++) {
+                    board.playletter(uInput.substring(i, i + 1), x, y + i, player);
                 }
-                updatehand(player, input);
+                updatehand(player, uInput);
             } else {
                 System.out.println("Invalid direction");
                 turn(player);
@@ -113,6 +115,7 @@ public class Scrabble {
         boolean valid = Arrays.binarySearch(main.words.toArray(), input) >= 0;
         boolean validLen = true;
         boolean validLetters = true;
+        boolean validPlacement = true;
 
         if (input.length() < 7) {
            if (direction.equals("v") && (y + input.length() > 15)) {
@@ -123,12 +126,13 @@ public class Scrabble {
            }
         }
 
-
         String[] arr = input.split("(?!^)");
+        ArrayList<String> InvalidLetters = new ArrayList<String>();
 
         for (String letter : arr) {
             if (!(player.getHand().contains(letter))) {
                 System.out.println("Invalid letter: " + letter);
+                InvalidLetters.add(letter);
                 validLetters = false;
                 break;
             } else {
@@ -136,7 +140,35 @@ public class Scrabble {
             }
         }
 
-        if (valid && validLen && validLetters) {
+
+        for (int i = 0; i < arr.length; i++) {
+            if (direction.equals("h")) {
+                if (checkIntersect(x + i, y)) {
+                    if (board.returnBoard()[x + i][y].getLetterValue().equals(arr[i])) {
+                        System.out.println("Intersection found at " + x + i + ", " + y);
+                        InvalidLetters.remove(arr[i]);
+                        ArrayList<String> uInputArr;
+                        uInputArr = (ArrayList<String>) Arrays.asList(uInput.split("(?!^)"));
+                        System.out.println(uInputArr);
+                    } else {
+                        System.out.println("Invalid placement 1");
+                        validPlacement = false;
+                    }
+                }
+            } else if (direction.equals("v")) {
+                if (checkIntersect(x, y + i)) {
+                    if (board.returnBoard()[x][y + i].getLetterValue().equals(arr[i])) {
+                        System.out.println("Intersection found at " + x + i + ", " + y);
+                        InvalidLetters.remove(arr[i]);
+                    } else {
+                        System.out.println("Invalid placement 2");
+                        validPlacement = false;
+                    }
+                }
+            }
+        }
+
+        if (valid && validLen && validLetters && validPlacement) {
             return true;
         } else {
             if (!valid) {
@@ -148,16 +180,23 @@ public class Scrabble {
             if (!validLetters) {
                 System.out.println("Invalid letters");
             }
+            if (!validPlacement) {
+                System.out.println("Invalid placement 3");
+            }
             return false;
         }
     }
 
-    public static void checkIntersect (String letter, int x, int y) {
-        String currentLetter = board.returnBoard()[x][y].getLetter();
-        boolean intersect = !(currentLetter.equals("   ") || currentLetter.equals("L 2") || currentLetter.equals("L 3") || currentLetter.equals("W 2") || currentLetter.equals("W 3"));
-        if (intersect) {
+    public static boolean checkIntersect (int x, int y) {
+
+        Space[][] arr = board.returnBoard();
+
+        if (arr[y][x].spaceHasLetter()) {
             System.out.println("Intersection found at " + x + ", " + y);
+            return true;
         }
+
+        return false;
     }
 
     private static void nextplayer() {

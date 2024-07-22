@@ -7,6 +7,9 @@ public class Letter {
     int points;
 
     public Letter (String letter, int x, int y, Player player, int points) {
+        if (letter == null) {
+            System.out.println("Letter is null");
+        }
         this.letter = letter;
         this.x = x;
         this.y = y;
